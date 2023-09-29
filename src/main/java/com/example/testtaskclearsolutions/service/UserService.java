@@ -8,13 +8,9 @@ import java.util.List;
 public interface UserService {
     User save(User user);
 
-    User findById(Long id);
-
     User update(User user);
 
     void delete(Long id);
 
     List<User> searchUsersByBirthDateRange(LocalDate from, LocalDate to);
-
-    User findByEmail(String email);
 }

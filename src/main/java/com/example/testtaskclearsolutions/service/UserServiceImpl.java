@@ -1,5 +1,6 @@
 package com.example.testtaskclearsolutions.service;
 
+import com.example.testtaskclearsolutions.exception.IncorrectDateException;
 import com.example.testtaskclearsolutions.exception.UserAgeException;
 import com.example.testtaskclearsolutions.exception.UserNotFoundException;
 import com.example.testtaskclearsolutions.model.User;
@@ -15,8 +16,8 @@ import java.util.NoSuchElementException;
 @Service
 public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
-    private int minAge = 18;
-
+    @Value("${app.age}")
+    private String minAge;
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -25,16 +26,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public User save(User user) {
         LocalDate now = LocalDate.now();
-        if (Period.between(user.getBirthDate(), now).getYears() < minAge){
+        if (Period.between(user.getBirthDate(), now).getYears() < Integer.parseInt(minAge)){
             throw new UserAgeException("User age has to be greater than 18");
         }
         return userRepository.save(user);
-    }
-
-    @Override
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new NoSuchElementException("Can`t find user by id: " + id));
     }
 
     @Override
@@ -56,11 +51,13 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> searchUsersByBirthDateRange(LocalDate from, LocalDate to) {
+        if (from.isAfter(to)) {
+            throw new IncorrectDateException("From has to be earlier than to");
+        }
         return userRepository.searchUserByBirthDateBetween(from, to);
     }
 
-    @Override
-    public User findByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+    public void setMinAge(String minAge) {
+        this.minAge = minAge;
     }
 }

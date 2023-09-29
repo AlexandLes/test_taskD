@@ -31,13 +31,15 @@ public class UserController {
     private DtoMapper<User, UserRequestDto, UserResponseDto> userMapper;
 
     @PostMapping
-    public ResponseEntity<UserResponseDto> create(@RequestBody @Valid UserRequestDto userRequestDto) {
-        return ResponseEntity.ok(userMapper.toDto(userService.save(userMapper.toModel(userRequestDto))));
+    public UserResponseDto create(@RequestBody @Valid UserRequestDto userRequestDto) {
+        return userMapper.toDto(userService.save(userMapper.toModel(userRequestDto)));
     }
 
     @GetMapping("/date-between")
-    public List<UserResponseDto> getAllUsersBetweenDate(@RequestParam("from") @DateTimeFormat(pattern="yyyy-MM-dd")LocalDate from,
-                                                        @RequestParam("to") @DateTimeFormat(pattern="yyyy-MM-dd")LocalDate to) {
+    public List<UserResponseDto> getAllUsersBetweenDate(@RequestParam("from")
+                                                            @DateTimeFormat(pattern="yyyy-MM-dd")LocalDate from,
+                                                        @RequestParam("to")
+                                                        @DateTimeFormat(pattern="yyyy-MM-dd")LocalDate to) {
         return userService.searchUsersByBirthDateRange(from, to).stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());

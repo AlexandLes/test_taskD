@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -24,4 +25,26 @@ public class User {
     private LocalDate birthDate;
     private String address;
     private String phoneNumber;
+
+    public User() {
+    }
+
+    public User(Long id, String email, String firstName, String lastName, LocalDate birthDate, String address, String phoneNumber) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
+    public User(String email, String firstName, String lastName, LocalDate birthDate, String address, String phoneNumber) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.address = address;
+        this.phoneNumber = phoneNumber;
+    }
 }
