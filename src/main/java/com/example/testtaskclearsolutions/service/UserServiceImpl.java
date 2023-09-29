@@ -1,19 +1,21 @@
-package service;
+package com.example.testtaskclearsolutions.service;
 
-import exception.UserNotFoundException;
-import model.User;
+import com.example.testtaskclearsolutions.exception.UserAgeException;
+import com.example.testtaskclearsolutions.exception.UserNotFoundException;
+import com.example.testtaskclearsolutions.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import repository.UserRepository;
-
+import com.example.testtaskclearsolutions.repository.UserRepository;
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
+    private int minAge = 18;
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -22,6 +24,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User save(User user) {
+        LocalDate now = LocalDate.now();
+        if (Period.between(user.getBirthDate(), now).getYears() < minAge){
+            throw new UserAgeException("User age has to be greater than 18");
+        }
         return userRepository.save(user);
     }
 
@@ -32,20 +38,15 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User update(Long id, User user) {
-        Optional<User> findedUser  = userRepository.findById(id);
-        if (findedUser.isPresent()) {
-            User userToUpdate = findedUser.get();
-            userToUpdate.setAddress(user.getAddress());
-            userToUpdate.setEmail(user.getEmail());
-            userToUpdate.setBirthDate(user.getBirthDate());
-            userToUpdate.setFirstName(user.getFirstName());
-            userToUpdate.setLastName(user.getLastName());
-            userToUpdate.setPhoneNumber(user.getPhoneNumber());
-            return userRepository.saveAndFlush(userToUpdate);
-        } else {
-            throw new UserNotFoundException("User with ID " + user.getId() + " not found");
-        }
+    public User update(User user) {
+        User editedUser = userRepository.findById(user.getId()).orElseThrow(() ->
+                new UserNotFoundException("User not found"));
+        editedUser.setAddress(user.getAddress());
+        editedUser.setEmail(user.getEmail());
+        editedUser.setLastName(user.getLastName());
+        editedUser.setPhoneNumber(user.getPhoneNumber());
+        editedUser.setFirstName(user.getFirstName());
+        return  userRepository.saveAndFlush(editedUser);
     }
 
     @Override

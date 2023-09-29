@@ -1,30 +1,15 @@
-package model;
+package com.example.testtaskclearsolutions.dto.request;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
+import lombok.Data;
 import java.time.LocalDate;
 
-@Table(name = "users")
-@Entity
-@Getter
-@Setter
-@ToString
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(unique = true, nullable = false)
+@Data
+public class UserRequestDto {
     @NotNull(message = "Email is required")
+    @Email
     private String email;
     @NotNull(message = "First name is required")
     private String firstName;
@@ -35,5 +20,4 @@ public class User {
     private LocalDate birthDate;
     private String address;
     private String phoneNumber;
-
 }
