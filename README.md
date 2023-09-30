@@ -1,13 +1,5 @@
 This is a simple implementation of user registration
 
-# Cinema-App
-
--------------------------------------------------------------
-
-The purpose of this project is to create a web application for a cinema that allows users to browse the schedule of movie sessions and purchase tickets online.
-The application has user registration system and a secure section with different access rights, depending on user roles.
-Users can also retrieve details about the movies available at the cinema, including descriptions.
-
 -------------------------------------------------------------
 # Features
 User:
