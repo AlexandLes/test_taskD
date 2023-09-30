@@ -22,7 +22,7 @@ User:
 * controller
     * Create (POST) - `/users` - register a new user
     * Delete (DELETE) - `/users/id` - delete a user by id
-    * Update (POST) - `/logout` - update user
+    * Update (POST) - `/users/id` - update user
     * Get all users by date between - `/users/date-between?..`
   
 * dao - classes in this package are used for retrieving and sending data to db
